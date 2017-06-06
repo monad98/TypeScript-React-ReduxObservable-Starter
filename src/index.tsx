@@ -1,22 +1,26 @@
+import './index.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-
-import Hello from './containers/Hello';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import { enthusiasm } from './reducers/index';
-import { StoreState } from './types/index';
+import { Route } from 'react-router-dom';
 
-import './index.css';
+import { ConnectedRouter } from 'react-router-redux';
+import configureStore, {history} from './configureStore';
+import UserSearch from './containers/UserSearch';
+import ReposByUser from './containers/ReposByUser';
+import Admin from './containers/Admin';
 
-const store = createStore<StoreState>(enthusiasm, {
-  enthusiasmLevel: 1,
-  languageName: 'TypeScript',
-});
+const store = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
-    <Hello />
+    <ConnectedRouter history={history}>
+        <div>
+            <Route exact={true} path="/" component={UserSearch} />
+            <Route path="/repos/:user" component={ReposByUser} />
+            <Route path="/admin" component={Admin} />user
+        </div>
+    </ConnectedRouter>
   </Provider>,
-  document.getElementById('root') as HTMLElement
+  document.querySelector('#app')
 );
